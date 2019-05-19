@@ -1,6 +1,7 @@
 /**
  * @file: talker.cpp
  * @breif: 发送消息到gps_message话题
+ * @exe_name: talker_pub
  * @node_name: talker
  * @author: liujin
  * @date: 2019/5/18
