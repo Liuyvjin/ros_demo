@@ -1,0 +1,6 @@
+.catkin_*
+.vscode*
+.ycm*
+build
+devel
+*~

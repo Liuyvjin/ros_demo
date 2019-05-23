@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<!--
+    这个文件不是要代替urdf，也不是urdf的扩展
+    这是用于表示关于机器人结构的语义信息的文件格式。 
+    除了srdf以外，此机器人也必须存在URDF文件，其中定义了srdf中引用的关节和连杆。
+-->
+<robot name="ur5">
+    <!--GROUPS（规划组）: 包括一组关节和连杆。可以用来指定：哪些自由度要规划plan、定义一条手臂、定义末端执行器等-->
+    <!--links: 当一个连杆被加入到组里时，它的父关节会自动加入规划组-->
+    <!--joints: 当一个关节被加入到组里时，它的子连杆会自动加入规划组-->
+    <!--chains:当一个链chain被指定时，所有在这条链上的links，以及这些links的父亲关节joints会被加入组中-->
+    <!--subgroups:可以使用一个已经定义的组作为子组-->
+    <group name="manipulator">  
+        <chain base_link="base_link" tip_link="ee_link" />
+    </group>
+
+    <group name="endeffector">
+        <link name="ee_link" />
+    </group>
+
+    <!--GROUP STATES（规划组位姿）: Purpose: 命名一个规划组的位姿，这个位姿是通过joints的值来指定的。-->
+    <group_state name="home" group="manipulator">
+        <joint name="elbow_joint" value="0" />
+        <joint name="shoulder_lift_joint" value="0" />
+        <joint name="shoulder_pan_joint" value="0" />
+        <joint name="wrist_1_joint" value="0" />
+        <joint name="wrist_2_joint" value="0" />
+        <joint name="wrist_3_joint" value="0" />
+    </group_state>
+    <group_state name="up" group="manipulator">
+        <joint name="elbow_joint" value="0" />
+        <joint name="shoulder_lift_joint" value="-1.5707" />
+        <joint name="shoulder_pan_joint" value="0" />
+        <joint name="wrist_1_joint" value="-1.5707" />
+        <joint name="wrist_2_joint" value="0" />
+        <joint name="wrist_3_joint" value="0" />
+    </group_state>
+    <!--END EFFECTOR（末端执行器）: 指定一个末端执行器。这个执行器包括的部分是group="endeffector"，当然也可以是其他组-->
+    <end_effector name="moveit_ee" parent_link="ee_link" group="endeffector" />
+    <!--VIRTUAL JOINT（虚拟关节）:定义了一个虚拟的关节，在机器人基坐标和世界参考系间-->
+    <virtual_joint name="fixed_base" type="fixed" parent_frame="world" child_link="base_link" />
+    <!--DISABLE COLLISIONS（关闭碰撞检查）: 默认情况下，假设机器人的任何link都可能与机器人中的任何其他link发生冲突。但是 有一些link之间，总是碰撞或者从不碰撞。。。这些位置不需要检查，因此关闭，从而减少行动规划的处理时间-->
+    <disable_collisions link1="base_link" link2="shoulder_link" reason="Adjacent" />
+    <disable_collisions link1="ee_link" link2="wrist_1_link" reason="Never" />
+    <disable_collisions link1="ee_link" link2="wrist_2_link" reason="Never" />
+    <disable_collisions link1="ee_link" link2="wrist_3_link" reason="Adjacent" />
+    <disable_collisions link1="forearm_link" link2="upper_arm_link" reason="Adjacent" />
+    <disable_collisions link1="forearm_link" link2="wrist_1_link" reason="Adjacent" />
+    <disable_collisions link1="shoulder_link" link2="upper_arm_link" reason="Adjacent" />
+    <disable_collisions link1="wrist_1_link" link2="wrist_2_link" reason="Adjacent" />
+    <disable_collisions link1="wrist_1_link" link2="wrist_3_link" reason="Never" />
+    <disable_collisions link1="wrist_2_link" link2="wrist_3_link" reason="Adjacent" />
+</robot>

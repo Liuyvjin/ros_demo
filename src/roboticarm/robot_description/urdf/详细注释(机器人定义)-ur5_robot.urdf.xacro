@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="ur5" >
+	
+	<!-- include -->
+	# include  通用gazebo 宏
+	<xacro:include filename="$(find ur_description)/urdf/common.gazebo.xacro" />
+	# include UR5机器人 宏
+	<xacro:include filename="$(find ur_description)/urdf/ur5.urdf.xacro" />
+
+	# 机器人宏实例化
+	<xacro:ur5_robot prefix="" joint_limited="false"/>
+
+	# 世界连杆
+	<link name="world" />
+	# 基连杆-世界连杆 关节 固结
+	<joint name="world_joint" type="fixed">
+	<parent link="world" />
+	<child link = "base_link" />
+	<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+	</joint>
+
+</robot>

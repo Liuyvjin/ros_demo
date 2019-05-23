@@ -1,0 +1,20 @@
+<launch>
+    <!--定义变量:urdf文件的路径-->
+    <arg name="model" default="$(find urdf_demo)/robot_description/urdf/mycar.urdf"/>
+        
+    <!--参数服务器-->
+    <!--用xacro.py解释urdf文件,保存到参数服务器中的robot_descriptiom-->
+    <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
+    <param name="use_gui" value="true"/> <!--是否使用gui-->
+    
+    <!--启动节点-->
+    <!--joint_state_publisher从ROS参数服务器中读取robot_description参数, 
+    找到所有non-fixed joint, 发布他们的JointState消息到/joint_states话题.-->
+    <node name="joint_state_publisher1" pkg="joint_state_publisher" type="joint_state_publisher"/>
+    <!--robot_state_publisher从/joint_states话题中获取机器人joint角度作为输入, 
+    使用机器人的运动学树模型计算出机器人link的3D姿态, 然后将其发布到话题/tf和 /tf_static.-->
+    <node name="robot_state_publisher2" pkg="robot_state_publisher" type="state_publisher" />
+    <!--启动rviz节点,-d指定了一个"*.rviz"文件,这个文件设置了rviz的显示模式-->
+    <node pkg="rviz" type="rviz" name='rviz' args="-d $(find urdf_demo)/rviz/urdf_display.rviz" output="screen"/>
+
+</launch>

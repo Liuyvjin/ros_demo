@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<robot name="6dof-arm">
+    <link name="base_link"></link>
+    <link name="link1"></link>
+    <link name="link2"></link>
+    <link name="link3"></link>
+    <link name="link4"></link>
+    <link name="link5"></link>
+    <link name="link6"></link>
+
+    <joint name="baseto1" type="fixed"> 
+        <origin rpy="0  0  0" xyz="0 0 0"/>     // 是相对与father_link坐标系的位姿 
+        <parent link="base_link"/>  
+        <child link="right"/>  
+    </joint>  
+
+</robot>

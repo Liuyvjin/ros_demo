@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+
+	<arg name="limited" default="false"/>
+	<arg name="robot_package" value="$(find roboticarm)"/> <!--机器人包的路径-->
+	<arg name="robot_des_path" value="$(arg robot_package)/robot_description"/>	<!--机器人描述文件的路径-->
+  	
+  	<!--加载robot_description-->
+  	<!--如果limit=false，则采用无限制的关节-->
+  	<param unless="$(arg limited)" name="robot_description" command="$(find xacro)/xacro --inorder $(arg robot_des_path)/urdf/ur5_robot.urdf.xacro" />
+  	<!--如果limit=true，则采用有限制的关节-->
+  	<param if="$(arg limited)" name="robot_description" command="$(find xacro)/xacro --inorder $(arg robot_des_path)/urdf/ur5_joint_limited_robot.urdf.xacro" />
+  	
+  	<!--启动joint_state_publisher节点，并且使用gui-->
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" >
+		<param name="use_gui" value="true"/>
+	</node>
+	<!--启动robot_state_publisher节点-->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+	<!--启动rviz节点-->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg robot_package)/rviz/urdf.rviz" output="screen" />
+
+</launch>
